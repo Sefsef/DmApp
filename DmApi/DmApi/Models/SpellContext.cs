@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace DnDApi.Models
+namespace DmApi.Models
 {
     public class SpellContext : DbContext
     {

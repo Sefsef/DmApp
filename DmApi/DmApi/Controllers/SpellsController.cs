@@ -1,14 +1,16 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using DnDApi.Models;
+using DmApi.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 
-namespace DnDApi.Controllers
+namespace DmApi.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class SpellsController : Controller
     {
         private readonly SpellContext _spells;
@@ -43,14 +45,14 @@ namespace DnDApi.Controllers
             return _spells.Spells.ToList();
         }
 
-        [HttpGet("byID/{id}", Name = "GetSpell")]
+        [HttpGet("byid/{id}", Name = "GetSpell")]
         public ActionResult<Spell> GetByID(int id)
         {
             Spell item = _spells.Spells.SingleOrDefault(spell => spell.ID == id);
             return item ?? (ActionResult<Spell>)NotFound();
         }
 
-        [HttpGet("byName/{name}", Name = "GetSpellByName")]
+        [HttpGet("byname/{name}", Name = "GetSpellByName")]
         public ActionResult<List<Spell>> GetByName(string name)
         {
             var item = _spells.Spells.Where(pSpell => pSpell.Name.IndexOf(name, StringComparison.OrdinalIgnoreCase) >= 0).ToList();

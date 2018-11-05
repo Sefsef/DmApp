@@ -1,4 +1,4 @@
-﻿using DnDApi.Models;
+using DmApi.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace DnDApi
+namespace DmApi
 {
     public class Startup
     {
@@ -23,6 +23,13 @@ namespace DnDApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection pServices)
         {
+            pServices.AddAuthentication("Bearer").AddIdentityServerAuthentication(options =>
+            {
+                options.Authority = "http://localhost:5000";
+                options.RequireHttpsMetadata = false;
+                options.ApiName = "api1";
+            });
+
             pServices.AddDbContext<SpellContext>
                 (options => options.UseSqlite(_connection));
             pServices.AddCors(options =>
@@ -42,6 +49,7 @@ namespace DnDApi
             if (pEnv.IsDevelopment())
                 pApp.UseDeveloperExceptionPage();
 
+            pApp.UseAuthentication();
             pApp.UseCors(_cors);
             pApp.UseMvc();
         }

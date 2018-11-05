@@ -1,11 +1,11 @@
-﻿using Microsoft.AspNetCore;
+using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 
-namespace DnDApi
+namespace DmApi
 {
     public static class Program
     {
-        public static void Main(string[] pArgs)
+        static void Main(string[] pArgs)
         {
             CreateWebHostBuilder(pArgs).Build().Run();
         }

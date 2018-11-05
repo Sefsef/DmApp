@@ -1,4 +1,4 @@
-﻿namespace DnDApi.Models
+namespace DmApi.Models
 {
     public class Spell
     {
