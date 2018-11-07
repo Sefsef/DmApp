@@ -19,7 +19,7 @@ namespace DmAuth
             {
                 new Client
                 {
-                    ClientId = "client",
+                    ClientId = "DmAppClientId",
 
                     AllowedGrantTypes = GrantTypes.ClientCredentials,
 

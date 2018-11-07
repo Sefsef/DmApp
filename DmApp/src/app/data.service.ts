@@ -9,9 +9,9 @@ export class DataService {
   constructor(private http: HttpClient) { }
 
   private testlink: string = 
-    "http://localhost:63581/api/spells/byName/test";
+    "http://localhost:4000/api/spells";
 
-  getUsers() {
+  getSpells() {
     return this.http.get(this.testlink);
   }
 }

@@ -2,12 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { DataService } from '../data.service';
 
 @Component({
-  selector: 'app-home',
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss']
+  selector: 'app-spells',
+  templateUrl: './spells.component.html',
+  styleUrls: ['./spells.component.scss']
 })
 
-export class HomeComponent implements OnInit {
+export class SpellsComponent implements OnInit {
 
   private spells: Object;
 
@@ -15,8 +15,9 @@ export class HomeComponent implements OnInit {
 
   ngOnInit() {
     this.data.getSpells().subscribe(data => {
-      this.spells = data[0];
+      this.spells = data;
       console.log(this.spells);
-    });
+    })
   }
+
 }

@@ -7,12 +7,15 @@ namespace DmApi
     {
         static void Main(string[] pArgs)
         {
-            CreateWebHostBuilder(pArgs).Build().Run();
+            BuildWebHost(pArgs).Run();
         }
 
-        public static IWebHostBuilder CreateWebHostBuilder(string[] pArgs)
+        public static IWebHost BuildWebHost(string[] pArgs)
         {
-            return WebHost.CreateDefaultBuilder(pArgs).UseStartup<Startup>();
+            return WebHost.CreateDefaultBuilder(pArgs)
+                .UseStartup<Startup>()
+                .UseUrls("http://localhost:4000")
+                .Build();
         }
     }
 }

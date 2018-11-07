@@ -3,9 +3,10 @@
     <a routerLink="/" class="logo">{{ appTitle }}</a>
     <nav>
       <ul>
-        <li><a routerLink="/">Home</a></li>
-        <li><a routerLink="/about">About</a></li>
-        <li><a routerLink="/contact">Contact us</a></li>
+        <li><a routerLink="/login" *ngIf="!auth.loggedIn()">Login</a></li>
+        <li><a routerLink="/register" *ngIf="!auth.loggedIn()">Register</a></li>
+        <li><a *ngIf="auth.loggedIn()" (click)="auth.logout()">Logout</a></li>
+        <li><a routerLink="/spells">Spells</a></li>
       </ul>
     </nav>
   </div>

@@ -1,17 +1,23 @@
-using DmApi.Models;
+using DmApi.Helpers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using DmApi.Services;
+using AutoMapper;
 
 namespace DmApi
 {
     public class Startup
     {
-        private readonly string _connection = "Data Source=SpellDB";
-        private readonly string _cors = "CorsPolicy";
+        private readonly string _connection = "Data Source=DmAPI.db";
 
         public Startup(IConfiguration pConfig)
         {
@@ -23,34 +29,66 @@ namespace DmApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection pServices)
         {
-            pServices.AddAuthentication("Bearer").AddIdentityServerAuthentication(options =>
+            pServices.AddCors();
+            pServices.AddDbContext<DataContext>
+                (options => options.UseSqlite(_connection));
+            pServices.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            pServices.AddAutoMapper();
+
+            var appSettingsSection = Configuration.GetSection("AppSettings");
+            pServices.Configure<AppSettings>(appSettingsSection);
+
+            var appSettings = appSettingsSection.Get<AppSettings>();
+            var key = Encoding.ASCII.GetBytes(appSettings.Secret);
+            pServices.AddAuthentication(options =>
             {
-                options.Authority = "http://localhost:5000";
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(options =>
+            {
+                options.Events = new JwtBearerEvents
+                {
+                    OnTokenValidated = context =>
+                    {
+                        var userService = context.HttpContext.RequestServices.GetRequiredService<IUserService>();
+                        var userID = int.Parse(context.Principal.Identity.Name);
+                        var user = userService.GetById(userID);
+                        if (user == null)
+                        {
+                            context.Fail("Unauthorized");
+                        }
+                        return Task.CompletedTask;
+                    }
+                };
                 options.RequireHttpsMetadata = false;
-                options.ApiName = "api1";
+                options.SaveToken = true;
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    ValidateIssuer = false,
+                    ValidateAudience = false
+                };
             });
 
-            pServices.AddDbContext<SpellContext>
-                (options => options.UseSqlite(_connection));
-            pServices.AddCors(options =>
-            {
-                options.AddPolicy(_cors,
-                    builder => builder.AllowAnyOrigin()
-                    .AllowAnyMethod()
-                    .AllowAnyHeader()
-                    .AllowCredentials());
-            });
-            pServices.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            // configure DI for application services
+            pServices.AddScoped<IUserService, UserService>();
+            pServices.AddScoped<ISpellService, SpellService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder pApp, IHostingEnvironment pEnv)
+        public void Configure(IApplicationBuilder pApp, IHostingEnvironment pEnv, ILoggerFactory pLoggerFactory)
         {
+            pLoggerFactory.AddConsole(Configuration.GetSection("Logging"));
+            pLoggerFactory.AddDebug();
+
             if (pEnv.IsDevelopment())
                 pApp.UseDeveloperExceptionPage();
 
+            pApp.UseCors(options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader().AllowCredentials());
+
             pApp.UseAuthentication();
-            pApp.UseCors(_cors);
+
             pApp.UseMvc();
         }
     }

@@ -1,0 +1,7 @@
+<h1>Spells</h1>
+
+<ul>
+  <li *ngFor="let spell of spells">
+    <a routerLink="/spells/{{spell.id}}">{{spell.name}}</a>
+  </li>
+</ul>

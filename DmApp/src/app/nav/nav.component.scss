@@ -5,10 +5,8 @@
 
 $colors: (
     primary: #DA5E14,
-    hover: lighten(#DA5E14, 10%),
+    hover: darken(#DA5E14, 50%),
 );
-
-
 
 header {
     background: color(primary);
@@ -28,12 +26,11 @@ header {
                 float: left;
 
                 a {
-                    padding: 1.5em;
-                    text-transform: uppercase;
+                    margin: 1.1em;
                     font-size: .8em;
 
                     &:hover {
-                        background: color(hover);
+                        color: color(hover);
                     }
                 }
             }
