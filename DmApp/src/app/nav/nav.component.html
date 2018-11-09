@@ -5,7 +5,7 @@
       <ul>
         <li><a routerLink="/login" *ngIf="!auth.loggedIn()">Login</a></li>
         <li><a routerLink="/register" *ngIf="!auth.loggedIn()">Register</a></li>
-        <li><a *ngIf="auth.loggedIn()" (click)="auth.logout()">Logout</a></li>
+        <li><a class="logout" *ngIf="auth.loggedIn()" (click)="auth.logout()">Logout</a></li>
         <li><a routerLink="/spells">Spells</a></li>
       </ul>
     </nav>
