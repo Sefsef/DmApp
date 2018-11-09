@@ -11,5 +11,6 @@ namespace DmApi.Services
         User Create(User pUser, string pPassword);
         void Update(User pUser, string pPassword = null);
         void Delete(int pID);
+        bool SetRoles(int pId, string pRoles);
     }
 }

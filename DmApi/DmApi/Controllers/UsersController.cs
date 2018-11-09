@@ -32,7 +32,7 @@ namespace DmApi.Controllers
         }
 
         [HttpPost("authenticate")]
-        [AllowAnonymous]
+        [Authorize(Roles = "Admin, Dm, Player")]
         public IActionResult Authenticate([FromBody]UserDTO pUserDTO)
         {
             User user = _userService.Authenticate(pUserDTO.Username, pUserDTO.Password);
@@ -46,10 +46,11 @@ namespace DmApi.Controllers
             {
                 Subject = new ClaimsIdentity(new Claim[]
                 {
-                    new Claim(ClaimTypes.Name, user.Id.ToString())
+                    new Claim(ClaimTypes.Name, user.Id.ToString()),
+                    new Claim(ClaimTypes.Role, user.Roles),
                 }),
                 Expires = DateTime.UtcNow.AddMonths(6),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
             };
 
             SecurityToken token = tokenHandler.CreateToken(tokenDescriptor);
@@ -65,8 +66,8 @@ namespace DmApi.Controllers
             });
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost("register")]
-        [AllowAnonymous]
         public IActionResult Register([FromBody]UserDTO pUserDTO)
         {
             var user = _mapper.Map<User>(pUserDTO);
@@ -82,6 +83,7 @@ namespace DmApi.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public IActionResult GetAll()
         {
@@ -90,6 +92,7 @@ namespace DmApi.Controllers
             return Ok(userDtos);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpGet("{id}")]
         public IActionResult GetById(int pId)
         {
@@ -98,6 +101,7 @@ namespace DmApi.Controllers
             return Ok(userDto);
         }
 
+        [Authorize(Roles = "Admin, Dm, Player")]
         [HttpPut("{id}")]
         public IActionResult Update(int pId, [FromBody]UserDTO pUserDTO)
         {
@@ -118,11 +122,21 @@ namespace DmApi.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
             _userService.Delete(id);
             return Ok();
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPatch("setrole/{id}")]
+        public IActionResult SetRoles(int pId, string pRoles)
+        {
+            if (_userService.SetRoles(pId, pRoles))
+                return Ok();
+            return BadRequest("User does not exist");
         }
     }
 }

@@ -10,7 +10,7 @@ namespace DmApi.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize]
+    [Authorize(Roles = "Admin, Dm, Player")]
     public class SpellsController : Controller
     {
         private readonly ISpellService _spells;

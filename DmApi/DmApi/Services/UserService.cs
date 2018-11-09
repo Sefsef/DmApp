@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using DmApi.Extensions;
 using DmApi.Helpers;
 using DmApi.Models;
 
@@ -78,11 +79,11 @@ namespace DmApi.Services
             if (_context.Users.Any(x => x.Username == pUser.Username))
                 throw new AppException("Username \"" + pUser.Username + "\" is already taken");
 
-            byte[] passwordHash, passwordSalt;
-            createPasswordHash(pPassword, out passwordHash, out passwordSalt);
+            createPasswordHash(pPassword, out var passwordHash, out var passwordSalt);
 
             pUser.PasswordHash = passwordHash;
             pUser.PasswordSalt = passwordSalt;
+            pUser.Roles = "Player";
 
             _context.Users.Add(pUser);
             _context.SaveChanges();
@@ -132,8 +133,7 @@ namespace DmApi.Services
             // update password if it was entered
             if (!string.IsNullOrWhiteSpace(pPassword))
             {
-                byte[] passwordHash, passwordSalt;
-                createPasswordHash(pPassword, out passwordHash, out passwordSalt);
+                createPasswordHash(pPassword, out var passwordHash, out var passwordSalt);
 
                 user.PasswordHash = passwordHash;
                 user.PasswordSalt = passwordSalt;
@@ -141,6 +141,25 @@ namespace DmApi.Services
 
             _context.Users.Update(user);
             _context.SaveChanges();
+        }
+
+        public bool SetRoles(int pId, string pRoles)
+        {
+            var user = _context.Users.Find(pId);
+            if (user == null)
+                return false;
+
+            var userRoles = user.Roles.Split(",");
+            foreach (var role in pRoles.Split(","))
+            {
+                if (role != "Dm" && role != "Player")
+                    return false;
+
+                if (!userRoles.Contains(role))
+                    userRoles.Append($",{role.Capitalize()}");
+            }
+
+            return true;
         }
     }
 }
