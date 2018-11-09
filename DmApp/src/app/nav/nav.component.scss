@@ -1,51 +1,48 @@
 // Short-hand function to retrieve a color from the $colors table
+
 @function color($key){
     @return map-get($colors, $key);
 }
 
-$colors: (
-    primary: #DA5E14,
-    hover: darken(#DA5E14, 50%),
-);
-
 header {
-    background: color(primary);
+    background: #1E1E1E;
 
     .logo {
         font-weight: bold;
+        padding: 10%;
+        background-color: #252525;
     }
 
-    nav {
-        justify-self: right;
+.nav-grid {
+    display:grid;
+    grid-template-columns: 1fr auto auto;
 
-        ul {
-            list-style-type: none;
-            margin: 0; padding: 0;
+    .title {
+        align-self: center;
+        padding: 10px;
+    }
 
-            li {
-                float: left;
-
-                a {
-                    margin: 1.1em;
-                    font-size: .8em;
-
-                    &:hover {
-                        color: color(hover);
-                        cursor: pointer;
-                    }
-                }
-            }
+    a {
+        font-size: .8em;
+        align-self: center;
+        padding: 12px;
+        &:hover {
+            color: white;
+            background-color: #333333;
         }
     }
+}
 
     .container {
-        margin: 0 auto;
-        padding: 1.3em;
         display: grid;
-        grid-template-columns: 30% auto;
+        grid-template-columns: auto 1fr;
     
         a {
-            color: white;
+            color: #BBB;
+
+            &:hover {
+                color: white;
+            }
         }
     }
 }

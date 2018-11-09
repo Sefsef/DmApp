@@ -1,21 +1,23 @@
-<h3>Register</h3>
+<div class="register-container">
+    <h3>Register</h3>
 
-<form>
-    <div>
-        <label for="">Username</label>
-        <input [(ngModel)]="registerUserData.username" name="username" type="text" placeholder="username"/>
-    </div>
-    <div>
-        <label for="">Password</label>
-        <input [(ngModel)]="registerUserData.password" name="password" type="password" placeholder="password"/>
-    </div>
-    <div>
-        <label for="">First name</label>
-        <input [(ngModel)]="registerUserData.firstname" name="firstname" type="text" placeholder="firstname"/>
-    </div>
-    <div>
-        <label for="">Last name</label>
-        <input [(ngModel)]="registerUserData.lastname" name="lastname" type="text" placeholder="lastname"/>
-    </div>
-    <button type="button" (click)="register()">Register</button>
-</form>
+    <form>
+        <div>
+            <label for="">Username</label>
+            <input [(ngModel)]="registerUserData.username" name="username" type="text" placeholder="username"/>
+        </div>
+        <div>
+            <label for="">Password</label>
+            <input [(ngModel)]="registerUserData.password" name="password" type="password" placeholder="password"/>
+        </div>
+        <div>
+            <label for="">First name</label>
+            <input [(ngModel)]="registerUserData.firstname" name="firstname" type="text" placeholder="firstname"/>
+        </div>
+        <div>
+            <label for="">Last name</label>
+            <input [(ngModel)]="registerUserData.lastname" name="lastname" type="text" placeholder="lastname"/>
+        </div>
+        <button type="button" (click)="register()">Register</button>
+    </form>
+</div>

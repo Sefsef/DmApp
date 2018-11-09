@@ -1,13 +1,12 @@
 <header>
   <div class="container">
     <a routerLink="/" class="logo">{{ appTitle }}</a>
-    <nav>
-      <ul>
-        <li><a routerLink="/login" *ngIf="!auth.loggedIn()">Login</a></li>
-        <li><a routerLink="/register" *ngIf="!auth.loggedIn()">Register</a></li>
-        <li><a class="logout" *ngIf="auth.loggedIn()" (click)="auth.logout()">Logout</a></li>
-        <li><a routerLink="/spells">Spells</a></li>
-      </ul>
-    </nav>
+    <div class="nav-grid">
+      <div class="title">Welcome, traveler.</div>
+        <a routerLink="/login" *ngIf="!auth.loggedIn()">Login</a>
+        <a routerLink="/register" *ngIf="!auth.loggedIn()">Register</a>
+        <a routerLink="/login" class="logout" *ngIf="auth.loggedIn()" (click)="auth.logout()">Logout</a>
+        <!-- <li><a routerLink="/spells">Spells</a> -->
+      </div>
   </div>
 </header>
