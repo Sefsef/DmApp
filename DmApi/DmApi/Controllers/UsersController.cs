@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using AutoMapper;
@@ -32,7 +33,7 @@ namespace DmApi.Controllers
         }
 
         [HttpPost("authenticate")]
-        [Authorize(Roles = "Admin, Dm, Player")]
+        [AllowAnonymous]
         public IActionResult Authenticate([FromBody]UserDTO pUserDTO)
         {
             User user = _userService.Authenticate(pUserDTO.Username, pUserDTO.Password);
@@ -40,15 +41,14 @@ namespace DmApi.Controllers
             if (user == null)
                 return BadRequest(new { message = "Username or password is incorrect" });
 
+            var claims = user.Roles.Split(",").Select(claim => new Claim(claim, "true")).ToList();
+            claims.Insert(0, new Claim(ClaimTypes.Name, user.Id.ToString()));
+
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Subject = new ClaimsIdentity(new Claim[]
-                {
-                    new Claim(ClaimTypes.Name, user.Id.ToString()),
-                    new Claim(ClaimTypes.Role, user.Roles),
-                }),
+                Subject = new ClaimsIdentity(claims.ToArray()),
                 Expires = DateTime.UtcNow.AddMonths(6),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
             };

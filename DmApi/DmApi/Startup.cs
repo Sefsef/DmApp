@@ -71,6 +71,13 @@ namespace DmApi
                 };
             });
 
+            pServices.AddAuthorization(options =>
+            {
+                options.AddPolicy("Admin", policy => policy.RequireClaim("Admin"));
+                options.AddPolicy("Dm", policy => policy.RequireClaim("Admin, Dm"));
+                options.AddPolicy("Player", policy => policy.RequireClaim("Admin, Dm, Player"));
+            });
+
             // configure DI for application services
             pServices.AddScoped<IUserService, UserService>();
             pServices.AddScoped<ISpellService, SpellService>();
