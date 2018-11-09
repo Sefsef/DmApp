@@ -2,11 +2,11 @@
     <form class="login-form">
         <div class="grid">
             <!-- <label for="">Username</label> -->
-            <input [(ngModel)]="loginUserData.username" name="username" type="text" placeholder="username"/>
+            <input [(ngModel)]="loginUserData.username" autocomplete="off" name="username" type="text" placeholder="username" (keyup.enter)="login()"/>
         </div>
         <div class="grid">
             <!-- <label for="">Password</label> -->
-            <input [(ngModel)]="loginUserData.password" name="password" type="password" placeholder="password"/>
+            <input [(ngModel)]="loginUserData.password" name="password" type="password" placeholder="password" (keyup.enter)="login()"/>
         </div>
         <button class="stretch" type="button" (click)="login()">Login</button>
     </form>
