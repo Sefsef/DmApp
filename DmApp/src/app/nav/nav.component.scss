@@ -9,7 +9,6 @@ header {
 
     .logo {
         font-weight: bold;
-        padding: 10%;
         background-color: #252525;
     }
 
@@ -19,15 +18,16 @@ header {
 
     .title {
         align-self: center;
-        padding: 10px;
+        padding: 0.5em;
+        text-align: center;
     }
 
     a {
-        font-size: .8em;
+        
         align-self: center;
-        padding: 12px;
+        padding: 0.5em;
         &:hover {
-            color: white;
+            color: rgb(192, 88, 18);
             background-color: #333333;
         }
     }
@@ -39,9 +39,10 @@ header {
     
         a {
             color: #BBB;
-
+            align-self: center;
+            padding: 0.5em;
             &:hover {
-                color: white;
+                color: rgb(192, 88, 18);
             }
         }
     }
