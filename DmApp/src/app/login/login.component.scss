@@ -1,6 +1,6 @@
 .login-container {
     display: grid;
-    grid-template-rows: 1fr;
+    grid-template-rows: 1fr auto;
     height: 100%;
 }
 
@@ -10,10 +10,21 @@
 
     display: grid;
     grid-gap: 5px;
+
+    .error {
+        min-height: 40px;
+        justify-self: center;
+        align-self:center;
+        vertical-align: bottom;
+        font-size: 0.8em;
+        color: #DDD;
+        display: block;
+    }
+
     .grid {
         display: grid;
         grid-template-columns: 1fr;
-        
+        min-width: 300px;
         label {
             text-align: left;
         }

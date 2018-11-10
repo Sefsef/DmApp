@@ -1,3 +1,5 @@
+@import "../../colors";
+
 .grid {
     display: grid;
     padding: 1em;
@@ -7,19 +9,42 @@
 
 .card-container {
     box-shadow: 0 0 16px 0 rgba(0,0,0,0.2);
-    background-color: #eee;
+    background-color: #252525;
     border: 1px solid black;
     &:hover {
-        box-shadow: 0 0 16px 0 rgba(197, 9, 9, 0.397);
-        border: 1px solid red;
+        box-shadow: 0 0 16px 0 rgba(197, 94, 9, 0.397);
+        border: 1px solid $hover-orange;
+       
+        svg {
+            fill: $hover-orange;
+        }
+
+        h4 {
+            color: $hover-orange;
+        }
+    }
+
+    &:active {
+        margin: 0.3em;
+        box-shadow: 0 0 16px 0 rgba(197, 94, 9, 0.397);
+        border: 1px solid $hover-orange;
+       
+        svg {
+            fill: $hover-orange;
+        }
     }
 }
 
 .card {
-    padding: 1.5em 1.5em 1.5em 1.5em;
+    padding: 1.5em;
     
     img {
        margin: 1.5em;
+    }
+
+    svg {
+        margin: 1.5em;
+        fill: #ddd;
     }
 }
 
@@ -28,6 +53,6 @@
     text-align: center;
     h4 {
         width: 100%;
-        color: black;
+        color: $regular-white;
     }
 }

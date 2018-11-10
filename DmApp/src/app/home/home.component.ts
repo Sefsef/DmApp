@@ -9,14 +9,9 @@ import { DataService } from '../data.service';
 
 export class HomeComponent implements OnInit {
 
-  private spells: Object;
-
   constructor(private data: DataService) { }
 
   ngOnInit() {
-    this.data.getSpells().subscribe(data => {
-      this.spells = data[0];
-      console.log(this.spells);
-    });
+    
   }
 }

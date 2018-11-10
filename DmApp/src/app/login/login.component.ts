@@ -11,13 +11,16 @@ import { Router } from '@angular/router';
 export class LoginComponent implements OnInit {
 
   loginUserData = {};
+  errorMessage: string;
 
   constructor(private auth: AuthService, private router: Router) { }
 
   ngOnInit() {
+
   }
 
   login() {
+    this.errorMessage = "test";
     this.auth.login(this.loginUserData).subscribe(
       response => 
       {
@@ -25,7 +28,13 @@ export class LoginComponent implements OnInit {
         localStorage.setItem('token', (response as any).token);
         this.router.navigateByUrl('/home');
       },
-      error => console.log(error)
+      error => {
+        console.log(error.statusText);
+        if (error.status == 0)
+          this.errorMessage = "The server is currently not available.";
+        else 
+          this.errorMessage = error.statusText;
+      }
     )
   }
 

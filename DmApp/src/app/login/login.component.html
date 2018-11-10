@@ -9,5 +9,6 @@
             <input [(ngModel)]="loginUserData.password" name="password" type="password" placeholder="password" (keyup.enter)="login()"/>
         </div>
         <button class="stretch" type="button" (click)="login()">Login</button>
+        <label class="error">{{errorMessage}}</label>
     </form>
 </div>
